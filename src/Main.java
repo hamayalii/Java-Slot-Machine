@@ -94,7 +94,7 @@ public class Main {
             }
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException _) {
             }
         }
         System.out.println("\n---------------");
