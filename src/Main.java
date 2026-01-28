@@ -40,6 +40,7 @@ public class Main {
             }else{
 
                 balance -= bet;
+
                 System.out.println("Spinning..");
 
                 row = spinRow();
@@ -53,6 +54,11 @@ public class Main {
                 }else{
                     System.out.println("Sorry, You loss this round..");
                 }
+                if (balance <= 0){
+
+                    System.out.println("GAME OVER, YOU LOSS ALL YOU MONEY");
+                    break;
+                }
                 System.out.print("Do you want to play again? (Y/N): ");
                 String playAgain = scanner.nextLine().toUpperCase();
                 if(!playAgain.equals("Y")){
@@ -64,7 +70,9 @@ public class Main {
     }
     static String[] spinRow(){
 
-        String[] symbols = {"🔔", "⭐", "🍋", "🍉", "🍒"};
+        String[] symbols = {"🔔","🔔","🔔","🔔","🔔",
+                               "⭐","⭐","⭐","⭐",
+                        "🍋","🍋","🍋", "🍉","🍉", "🍒"};
         String[] row = new String[3];
 
         Random random = new Random();
@@ -77,46 +85,46 @@ public class Main {
     static void printRow(String[] row){
 
         System.out.println("---------------");
-        System.out.println(" " + String.join(" | ", row));
-        System.out.println("---------------");
+        for(int i = 0 ; i < 3 ; i++) {
+
+            System.out.print(row[i]);
+
+            if(i < row.length - 1){
+                System.out.print(" | ");
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+        }
+        System.out.println("\n---------------");
     }
     static int getPayout(String[] row , int bet){
 
         if(row[0].equals(row[1]) && row[1].equals(row[2])){
+            int symbolValue = getSymbolValuer(row[0]);
+            return bet * symbolValue * 2;
 
-            return switch(row[0]){
-
-                case "🔔" -> bet * 3;
-                case "⭐" -> bet * 4;
-                case "🍋" -> bet * 5;
-                case "🍉" -> bet * 6;
-                case "🍒" -> bet * 10;
-                default -> 0;
-            };
         }else if(row[0].equals(row[1])){
+            int symbolValue = getSymbolValuer(row[0]);
+            return bet * symbolValue;
 
-            return switch(row[0]){
-
-                case "🔔" -> bet * 2;
-                case "⭐" -> bet * 3;
-                case "🍋" -> bet * 4;
-                case "🍉" -> bet * 5;
-                case "🍒" -> bet * 6;
-                default -> 0;
-            };
         }else if(row[1].equals(row[2])){
 
-            return switch(row[1]){
-
-                case "🔔" -> bet * 2;
-                case "⭐" -> bet * 3;
-                case "🍋" -> bet * 4;
-                case "🍉" -> bet * 5;
-                case "🍒" -> bet * 6;
-                default -> 0;
-            };
+            int symbolValue = getSymbolValuer(row[1]);
+            return bet * symbolValue;
         }
         return 0;
     }
+    static int getSymbolValuer(String symbol) {
 
+        return switch (symbol) {
+            case "🔔" -> 3;
+            case "⭐" -> 4;
+            case "🍋" -> 5;
+            case "🍉" -> 6;
+            case "🍒" -> 10;
+            default -> 0;
+        };
+    }
 }
